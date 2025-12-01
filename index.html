@@ -6,7 +6,9 @@
     <title>Sevrae</title>
 
     <style>
-        /* GLOBAL */
+        /* ========================
+           GLOBAL SITE STYLES
+        ========================= */
         body {
             margin: 0;
             padding: 0;
@@ -24,47 +26,50 @@
             -webkit-user-drag: none;
         }
 
-        /* CONTAINER */
+        /* LOGO IN CORNER */
+        .corner-logo {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 100;
+            width: 140px;
+            opacity: 0;
+            animation: fadeInLogo 1.2s ease forwards;
+        }
+
+        .corner-logo::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle,
+                rgba(255,255,255,0.08) 0%,
+                rgba(255,255,255,0.0) 70%
+            );
+            z-index: -1;
+            filter: blur(22px);
+        }
+
+        @keyframes fadeInLogo {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* MAIN CONTAINER */
         .container {
             width: 90%;
             max-width: 900px;
             margin: auto;
-            padding-top: 140px;
+            padding-top: 140px; 
             text-align: center;
             animation: fadeIn 1.6s ease forwards;
             opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* LOGO */
-        .logo {
-            width: 200px;
-            margin: 0 auto 30px auto;
-            display: block;
-            animation: floatIn 1.2s ease forwards;
-        }
-
-        @keyframes floatIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* HEADLINE */
-        h1 {
-            font-size: 3.4rem;
-            font-weight: 700;
-            letter-spacing: -0.8px;
-            background: linear-gradient(90deg, #fff, #7de9ff);
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 10px;
-        }
-
+        /* TAGLINE */
         .tagline {
             font-size: 1.35rem;
             font-weight: 300;
@@ -78,12 +83,16 @@
             to { opacity: 0.75; transform: translateY(0); }
         }
 
-        .divider {
-            width: 90px;
-            height: 1px;
-            background: #333;
-            margin: 40px auto;
-        }
+    
+        .lower-half {
+    margin-top: 160px;          /* pushes content down below pipeline */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* centers everything horizontally */
+    justify-content: center;   /* centers internal flow */
+    text-align: center;
+}
 
         .coming {
             font-size: 1rem;
@@ -167,29 +176,125 @@
 
         /* ANIMATIONS */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* ========================
+           ANIMATION BLOCK STYLES
+        ========================= */
+        :root {
+            /* Matched animation vars to site theme */
+            --accent: #38bdf8;
+            --accent2: #22c55e;
+            --text: #e5e7eb;
+            --highlight: rgba(56,189,248,0.10);
+        }
+
+
+
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 20px auto;
+            position: relative;
+            transform: translateX(-40px)
+        }
+
+        
+
+        /* WAVEFORM */
+        .waveform { opacity: 0; }
+        @keyframes waveAppear { to { opacity: 1; } }
+        @keyframes waveFade   { to { opacity: 0.15; } }
+        .wave-svg { width: 220px; height: 60px; }
+        .wave-path { stroke-dasharray: 500; stroke-dashoffset: 500; stroke: var(--accent); fill: none; stroke-width: 2; }
+        @keyframes drawWave {
+            0%   { stroke-dashoffset: 500; opacity: .2; }
+            100% { stroke-dashoffset: 0;   opacity: 1;  }
+        }
+
+        /* ARROWS */
+        .arrow {
+            width: 60px; height: 2px;
+            background: linear-gradient(to right, var(--accent), var(--accent2));
+            opacity: 0; position: relative;
+        }
+        .arrow::after {
+            content: ""; position: absolute; right: -6px; top: -4px;
+            width: 10px; height: 10px;
+            border-top: 2px solid var(--accent2);
+            border-right: 2px solid var(--accent2);
+            transform: rotate(45deg);
+        }
+        @keyframes arrowIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* NN */
+        .nn { display: flex; gap: 40px; align-items: center; position: relative; }
+        .layer { opacity: 0; display: flex; flex-direction: column; gap: 10px; align-items: center; position: relative; }
+        @keyframes layerFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .node {
+            width: 16px; height: 16px; border-radius: 50%;
+            opacity: .6; background: rgba(56,189,248,0.25);
+            border: 1px solid rgba(56,189,248,0.7);
+        }
+        .node.premium-activate { animation: premiumGlow 0.6s ease-out forwards; }
+        @keyframes premiumGlow {
+            0%   { transform: scale(.8); opacity:.4; box-shadow:none; }
+            50%  { transform: scale(1.5); opacity:1; box-shadow:0 0 24px var(--accent); }
+            100% { transform: scale(1.0); opacity:.95; box-shadow:0 0 10px rgba(56,189,248,.7); }
+        }
+
+        /* TOKENS */
+        .token {
+            position: absolute; width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent2); box-shadow: 0 0 10px rgba(34,197,94,.8);
+            opacity: 0; pointer-events: none; z-index: 10;
+        }
+
+        /* TEXT OUTPUT */
+        .output-wrapper {
+            min-width: 360px; height: 36px; display: flex; align-items: center;
+            position: relative; font-size: 1.35rem; font-weight: 500;
+            color: var(--text); white-space: nowrap;
+        }
+        #output-text { white-space: nowrap; }
+        #output-text.highlight { background: var(--highlight); transition: background 0.2s ease; }
+        .cursor {
+            display: inline-block; width: 2px; height: 1.3em; margin-left: 2px;
+            background: var(--accent); animation: blink .8s step-end infinite; opacity: 0;
+        }
+        @keyframes blink { 50% { background: transparent; } }
 
         /* MOBILE */
         @media (max-width: 480px) {
-            h1 { font-size: 2.4rem; }
+            .corner-logo { width: 100px; top: 18px; left: 18px; }
             .tagline { font-size: 1.1rem; }
-            input[type="email"] {
-                width: 190px;
-                margin-bottom: 10px;
+            input[type="email"] { width: 190px; margin-bottom: 10px; }
+            button { display: block; width: 100%; margin-left: 0; margin-top: 6px; }
+            
+            /* Scale down animation for mobile */
+            .pipeline {
+                transform: scale(0.45);
+                transform-origin: center center;
+                margin: -40px 0; /* Negate the whitespace from scaling */
             }
-            button {
-                display: block;
-                width: 100%;
-                margin-left: 0;
-                margin-top: 6px;
+            .output-wrapper {
+                min-width: 250px; /* Prevent wide blowout on mobile */
+            }
+        }
+        
+        @media (min-width: 481px) and (max-width: 900px) {
+             .pipeline {
+                transform: scale(0.7);
+                transform-origin: center center;
             }
         }
     </style>
@@ -197,29 +302,82 @@
 
 <body>
 
+    <img src="Sevrae logo.png" alt="Sevrae Logo" class="corner-logo">
+
     <div class="container">
 
-        <!-- LOGO -->
-        <img src="Sevrae logo.png" alt="Sevrae Logo" class="logo">
+       <div class="pipeline">
 
-        <h1>Sevrae</h1>
-        <p class="tagline">Something intelligent is coming.</p>
+            <div class="waveform">
+            <svg class="wave-svg" viewBox="0 0 260 60">
+                <path class="wave-path"
+                d="M5 30
+                    C20 10,35 10,50 30
+                    S80 50,95 30
+                    S110 10,125 30
+                    S140 50,155 30
+                    S170 10,185 30
+                    S200 50,215 30
+                    S230 10,245 30"/>
+            </svg>
+            </div>
 
-        <div class="divider"></div>
+            <div class="arrow arrow-1"></div>
+
+            <div class="nn">
+
+            <div class="layer layer-input">
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+            </div>
+
+            <div class="layer layer-h1">
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+            </div>
+
+            <div class="layer layer-h2">
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+            </div>
+
+            <div class="layer layer-output">
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+            </div>
+
+            </div>
+
+            <div class="arrow arrow-2"></div>
+
+            <div class="output-wrapper">
+            <span id="output-text"></span><span class="cursor" id="cursor"></span>
+            </div>
+
+        </div>
+        <div class="lower-half">
 
         <p class="coming">Stealth Mode</p>
 
-        <!-- EMAIL SIGNUP -->
         <form 
+            id="sevrae-form"
             action="https://formsubmit.co/yisaketsega@gmail.com"
             method="POST"
             onsubmit="showMessage()"
         >
-            <input type="email" name="email" placeholder="Stay in the loop" required>
+            <input type="email" id="email" name="email" placeholder="Stay in the loop" required>
 
             <button type="submit">Notify Me</button>
+            <div id="email-error" style="color: #ff4d4d; margin-top: 10px; font-size: 0.9rem;"></div>
 
-            <!-- Hidden settings -->
             <input type="hidden" name="_subject" value="New Sevrae Signup!" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_autoresponse" value="Thanks — Sevrae will reach out soon." />
@@ -228,7 +386,6 @@
 
         <p id="thanks">Thank you — you’ll hear from us soon.</p>
 
-        <!-- SOCIAL -->
         <div class="social">
             <a href="https://www.linkedin.com/company/sevrae/" target="_blank">
                 Follow us on LinkedIn →
@@ -237,15 +394,341 @@
 
     </div>
 
+    </div>
+
     <div class="footer">
         © <span id="year"></span> Sevrae. All rights reserved.
     </div>
 
     <script>
-        function showMessage() {
-            document.getElementById("thanks").style.display = "block";
+      const form = document.getElementById('sevrae-form');
+      const emailInput = document.getElementById('email');
+      const emailError = document.getElementById('email-error');
+      
+      function showMessage() {
+         // This is handled by the submit listener mainly, but kept for compatibility
+         document.getElementById("thanks").style.display = "block";
+      }
+
+      document.getElementById("year").innerText = new Date().getFullYear();
+
+      // Allowed TLDs
+      const validTLDs = [
+        "com","net","org","co","io","ai","app","dev","xyz","tech","me","us",
+        "edu","gov","info","biz","cloud","store","online","site"
+      ];
+
+      // Disposable domains
+      const disposableDomains = [
+        "mailinator.com",
+        "10minutemail.com",
+        "tempmail.com",
+        "guerrillamail.com"
+      ];
+
+     
+      const regexEmailCheck = (email) => {
+        return email.match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))$/
+        );
+      };
+
+      function isDisposable(domain) {
+        return disposableDomains.some(d => domain === d || domain.endsWith("." + d));
+      }
+
+      function validateEmailDeep(emailRaw) {
+        const email = emailRaw.trim().toLowerCase();
+
+        // First-pass check using regex
+        if (!regexEmailCheck(email))
+          return "Enter a valid email address.";
+
+        // Now perform strict domain & TLD validation
+        const [local, domain] = email.split("@");
+
+        // Must contain a dot AFTER the @
+        if (!domain.includes("."))
+          return "Email must contain a valid domain like example.com.";
+
+        const firstDot = domain.indexOf(".");
+        if (firstDot === 0)
+          return "Email domain cannot start with a dot.";
+
+        const parts = domain.split(".");
+        if (parts.length < 2)
+          return "Domain must include a valid TLD.";
+
+        const tld = parts[parts.length - 1];
+
+        // Enforced TLD allowlist
+        if (!validTLDs.includes(tld))
+          return "Email must end with a valid domain ending like .com or .io.";
+
+        // Extra validation on domain labels
+        for (let i = 0; i < parts.length - 1; i++) {
+          const label = parts[i];
+          if (!label.length)
+            return "Invalid domain label.";
+          if (!/^[a-z0-9-]+$/i.test(label))
+            return "Invalid domain label.";
+          if (label.startsWith("-") || label.endsWith("-"))
+            return "Invalid domain label.";
         }
-        document.getElementById("year").innerText = new Date().getFullYear();
+
+        // Disposables
+        if (isDisposable(domain))
+          return "Disposable email addresses are not allowed.";
+
+        return null; // valid
+      }
+
+      // Live validation on input
+      emailInput.addEventListener("input", () => {
+        const error = validateEmailDeep(emailInput.value);
+        emailError.textContent = error ? error : "";
+      });
+
+      // Form submit protection
+      form.addEventListener("submit", function (e) {
+        const error = validateEmailDeep(emailInput.value);
+
+        if (error) {
+          e.preventDefault();
+          emailError.textContent = error;
+        } else {
+             // Let it submit, but show thank you message
+             showMessage();
+        }
+      });
+    </script>
+
+    <script>
+    /* ================================================
+        MASTER RESTART LOOP (ANIMATION)
+    ================================================ */
+
+    function runAll() {
+
+    /* --------------------------------------
+        RESET STATE
+    -------------------------------------- */
+    const waveform = document.querySelector('.waveform');
+    const wavePath = document.querySelector('.wave-path');
+
+    // Reset opacity + stroke color BEFORE restarting animation
+    waveform.style.opacity = "0";
+    wavePath.style.opacity = "1";
+    wavePath.style.stroke = "var(--accent)";
+
+    // Fully reset animations
+    waveform.style.animation = 'none';
+    wavePath.style.animation = 'none';
+    void waveform.offsetWidth;
+    void wavePath.offsetWidth;
+
+    // Re-enable animation properties
+    waveform.style.animation = '';
+    wavePath.style.animation = '';
+
+
+    // Reset arrows
+    document.querySelectorAll('.arrow').forEach(a => {
+        a.style.animation = 'none';
+        void a.offsetWidth;
+        a.style.animation = '';
+    });
+
+    // Reset NN layers
+    document.querySelectorAll('.layer').forEach(l => {
+        l.style.animation = 'none';
+        void l.offsetWidth;
+        l.style.animation = '';
+    });
+
+    // Reset activations
+    document.querySelectorAll('.node').forEach(n => {
+        n.classList.remove('premium-activate');
+    });
+
+    // Remove old tokens
+    document.querySelectorAll('.token').forEach(t => t.remove());
+
+    // Reset text
+    const out = document.getElementById('output-text');
+    out.textContent = '';
+    out.classList.remove('highlight');
+
+    // Reset cursor
+    const cursor = document.getElementById('cursor');
+    cursor.style.opacity = 0;
+
+    /* --------------------------------------
+        REPLAY WAVE ANIMATION
+    -------------------------------------- */
+    waveform.style.animation =
+        'waveAppear 0.8s forwards 0.3s, waveFade 0.8s forwards 3.0s';
+
+    wavePath.style.animation =
+        'drawWave 2.2s ease-out forwards 1.0s';
+
+    /* --------------------------------------
+        REPLAY ARROWS
+    -------------------------------------- */
+    document.querySelector('.arrow-1').style.animation =
+        'arrowIn 0.7s ease-out forwards 2.5s';
+
+    document.querySelector('.arrow-2').style.animation =
+        'arrowIn 0.7s ease-out forwards 5.4s';
+
+    /* --------------------------------------
+        REPLAY NN LAYER FADE-IN
+    -------------------------------------- */
+    document.querySelector('.layer-input').style.animation =
+        'layerFade 0.8s forwards 3.3s';
+
+    document.querySelector('.layer-h1').style.animation =
+        'layerFade 0.8s forwards 3.9s';
+
+    document.querySelector('.layer-h2').style.animation =
+        'layerFade 0.8s forwards 4.5s';
+
+    document.querySelector('.layer-output').style.animation =
+        'layerFade 0.8s forwards 5.1s';
+
+    /* --------------------------------------
+        DENSE TOKEN FLOW
+    -------------------------------------- */
+
+    function setupDenseTokens() {
+        const nn = document.querySelector('.nn');
+
+        const layers = Array.from(document.querySelectorAll('.layer')).map(
+        l => Array.from(l.querySelectorAll('.node'))
+        );
+
+        const nnRect = nn.getBoundingClientRect();
+
+        const layerPositions = layers.map(nodes =>
+        nodes.map(node => {
+            const r = node.getBoundingClientRect();
+            return {
+            x: r.left - nnRect.left + r.width / 2,
+            y: r.top  - nnRect.top  + r.height / 2,
+            el: node
+            };
+        })
+        );
+
+        const segments = [
+        { from: layerPositions[0], to: layerPositions[1], baseDelay: 3600 },
+        { from: layerPositions[1], to: layerPositions[2], baseDelay: 4800 },
+        { from: layerPositions[2], to: layerPositions[3], baseDelay: 6000 }
+        ];
+
+        const travelDuration = 900;
+
+        segments.forEach(seg => {
+        const activatedTargets = new Set();
+
+        seg.from.forEach((src, si) => {
+            seg.to.forEach((dst, ti) => {
+            const stagger = (si + ti) * 40;
+            const startDelay = seg.baseDelay + stagger;
+
+            setTimeout(() => {
+                const token = document.createElement('div');
+                token.className = 'token';
+                document.querySelector('.nn').appendChild(token);
+
+                const startTime = performance.now();
+
+                function frame(now) {
+                const t = (now - startTime) / travelDuration;
+                if (t <= 0) return requestAnimationFrame(frame);
+
+                const clamped = Math.min(t, 1);
+                const x = src.x + (dst.x - src.x) * clamped;
+                const y = src.y + (dst.y - src.y) * clamped;
+
+                token.style.opacity = 1;
+                token.style.left = (x - 4) + 'px';
+                token.style.top  = (y - 4) + 'px';
+
+                if (clamped > 0.7 && !activatedTargets.has(ti)) {
+                    activatedTargets.add(ti);
+                    dst.el.classList.add('premium-activate');
+                }
+
+                if (t >= 1) return token.remove();
+                requestAnimationFrame(frame);
+                }
+
+                requestAnimationFrame(frame);
+            }, startDelay);
+            });
+        });
+        });
+    }
+
+    setupDenseTokens();
+
+    /* --------------------------------------
+        TEXT SEQUENCE
+    -------------------------------------- */
+
+    setTimeout(() => {
+        const wrong = '$0m37#1n9 1n73LL1g3n7 15 c0m1n9...';
+        const correct = 'Something intelligent is coming…';
+
+        function type(text, speed, cb) {
+        let i = 0;
+        cursor.style.opacity = 1;
+        function step() {
+            if (i <= text.length) {
+            out.textContent = text.slice(0, i++);
+            return setTimeout(step, speed);
+            }
+            cb && cb();
+        }
+        step();
+        }
+
+        function erase(speed, cb) {
+        function step() {
+            let c = out.textContent;
+            if (c.length > 0) {
+            out.textContent = c.slice(0, -1);
+            return setTimeout(step, speed);
+            }
+            cb && cb();
+        }
+        step();
+        }
+
+        type(wrong, 60, () => {
+        setTimeout(() => {
+            out.classList.add('highlight');
+            setTimeout(() => {
+            out.classList.remove('highlight');
+            erase(30, () => {
+                type(correct, 60);
+            });
+            }, 400);
+        }, 250);
+        });
+
+    }, 6500);
+
+    /* --------------------------------------
+        SCHEDULE NEXT LOOP
+    -------------------------------------- */
+    // (Full animation lasts ~10s after text)
+    setTimeout(runAll, 15000); // 21s total: full cycle + 10s delay
+    }
+
+    /* START */
+    runAll();
     </script>
 
 </body>
