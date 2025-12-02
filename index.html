@@ -191,8 +191,6 @@
             --highlight: rgba(56,189,248,0.10);
         }
 
-
-
         .pipeline {
             display: flex;
             align-items: center;
@@ -202,7 +200,6 @@
             transform: translateX(-40px)
         }
 
-        
 
         /* WAVEFORM */
         .waveform { opacity: 0; }
@@ -275,6 +272,15 @@
 
         /* MOBILE */
         @media (max-width: 480px) {
+            /* Allow output text to wrap into 2 lines on mobile */
+
+
+
+/* Ensure the animated text element can wrap too */
+        #output-text {
+            white-space: normal !important;
+}
+
             .corner-logo { width: 100px; top: 18px; left: 18px; }
             .tagline { font-size: 1.1rem; }
             input[type="email"] { width: 190px; margin-bottom: 10px; }
@@ -282,21 +288,26 @@
             
             /* Scale down animation for mobile */
             .pipeline {
-                transform: scale(0.45);
+                transform: scale(0.35);
+                 position: relative;
                 transform-origin: center center;
-                margin: -40px 0; /* Negate the whitespace from scaling */
+                margin: 0px 0px 0; /* Negate the whitespace from scaling */
+                margin-top: -30px;   
+            }
+            .lower-half {
+                margin-top: 90px;          /* pushes content down below pipeline */
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;       /* centers everything horizontally */
+                justify-content: center;   /* centers internal flow */
+                text-align: center;
             }
             .output-wrapper {
                 min-width: 250px; /* Prevent wide blowout on mobile */
             }
         }
-        
-        @media (min-width: 481px) and (max-width: 900px) {
-             .pipeline {
-                transform: scale(0.7);
-                transform-origin: center center;
-            }
-        }
+         
     </style>
 </head>
 
@@ -397,7 +408,7 @@
     </div>
 
     <div class="footer">
-        © <span id="year"></span> Sevrae. All rights reserved.
+        © <span id="year"></span> sevrae. All rights reserved.
     </div>
 
     <script>
